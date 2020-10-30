@@ -1,28 +1,76 @@
 import Layout from "../components/layout";
 import Image from "next/image";
-import styles from "../styles/index.module.sass";
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { chunk, sum, max } from "lodash";
+
+const Grid = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+`;
+
+const Row = styled.div`
+	display: flex;
+	max-width: 100%;
+`;
+
+const StyledImage = styled(Image)`
+	object-fit: cover;
+`;
 
 export default function Home({ imagesArr }) {
-	console.log("hello");
+	const [width, setWidth] = useState(null);
+	const [col, setCol] = useState(3);
+
+	useEffect(() => {
+		document.addEventListener("DOMcontentloaded", isResize());
+		return () => {
+			document.removeEventListener("DOMcontentloaded", isResize());
+		};
+	}, [width]);
+
+	useEffect(() => {
+		window.addEventListener("resize", isResize, false);
+		return () => {
+			window.removeEventListener("resize", isResize, false);
+		};
+	}, [width]);
+
+	const isResize = () => {
+		setWidth(Math.min(window.innerWidth, 1440));
+		if (width < 620) {
+			setCol(1);
+		} else if (width < 960) {
+			setCol(2);
+		} else {
+			setCol(3);
+		}
+	};
+
+	const rows = chunk(imagesArr, col);
+
 	return (
-		<Layout>
-			<h1>Home</h1>
-			<div className={styles.grid}>
-				{imagesArr.map((img, index) => {
-					const sizeMultiplier = 0.5;
-					const ratio = img.w / img.h;
-					return (
-						<Image
-							src={img.path}
-							alt={"image" + index}
-							key={img.path}
-							width={img.w * sizeMultiplier}
-							height={img.h * sizeMultiplier}
-							quality={100}
-						/>
-					);
-				})}
-			</div>
+		<Layout title={"Home"}>
+			<h1>Test</h1>
+			<Grid>
+				{width !== null &&
+					rows.map((row, index) => {
+						const rowRatio = width / sum(row.map((img) => img.w));
+						const height = max(row.map((img) => img.h));
+						return (
+							<Row key={index}>
+								{row.map((img) => (
+									<StyledImage
+										src={img.path}
+										key={img.path}
+										width={img.w * rowRatio}
+										height={height * rowRatio}
+									/>
+								))}
+							</Row>
+						);
+					})}
+			</Grid>
 		</Layout>
 	);
 }

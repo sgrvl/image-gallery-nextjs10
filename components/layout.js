@@ -1,5 +1,4 @@
 import Head from "next/head";
-import styles from "../styles/layout.module.sass";
 
 const Layout = ({ children, title }) => {
 	return (
@@ -9,7 +8,7 @@ const Layout = ({ children, title }) => {
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
-			<main className={styles.main}>{children}</main>
+			<main style={{ maxWidth: "1440px", margin: "0 auto" }}>{children}</main>
 		</div>
 	);
 };
