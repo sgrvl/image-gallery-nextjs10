@@ -51,7 +51,7 @@ export default function Home({ imagesArr }) {
 
 	return (
 		<Layout title={"Home"}>
-			<h1>Test</h1>
+			<h1>Home</h1>
 			<Grid>
 				{width !== null &&
 					rows.map((row, index) => {
