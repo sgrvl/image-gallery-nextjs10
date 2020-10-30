@@ -1,23 +1,29 @@
+import Layout from "../components/layout";
 import Image from "next/image";
+import styles from "../styles/index.module.sass";
 
 export default function Home({ imagesArr }) {
+	console.log("hello");
 	return (
-		<>
-			<h1>Images</h1>
-			<div>
+		<Layout>
+			<h1>Home</h1>
+			<div className={styles.grid}>
 				{imagesArr.map((img, index) => {
+					const sizeMultiplier = 0.5;
+					const ratio = img.w / img.h;
 					return (
 						<Image
 							src={img.path}
 							alt={"image" + index}
 							key={img.path}
-							width={img.w}
-							height={img.h}
+							width={img.w * sizeMultiplier}
+							height={img.h * sizeMultiplier}
+							quality={100}
 						/>
 					);
 				})}
 			</div>
-		</>
+		</Layout>
 	);
 }
 
