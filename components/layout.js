@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const Layout = ({ children, title }) => {
+export default function Layout({ children, title }) {
 	return (
 		<div>
 			<Head>
@@ -15,6 +15,4 @@ const Layout = ({ children, title }) => {
 			</main>
 		</div>
 	);
-};
-
-export default Layout;
+}

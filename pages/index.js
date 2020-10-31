@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { chunk, sum, max } from "lodash";
+import Modal from "../components/modal";
 
 const Grid = styled.div`
 	display: flex;
@@ -23,6 +24,8 @@ const StyledImage = styled(Image)`
 export default function Home({ imagesArr }) {
 	const [width, setWidth] = useState(null);
 	const [col, setCol] = useState(3);
+	const [currImg, setCurrImg] = useState(null);
+	const [isLoaded, setIsLoaded] = useState(false);
 
 	useEffect(() => {
 		document.addEventListener("DOMcontentloaded", isResize());
@@ -51,9 +54,27 @@ export default function Home({ imagesArr }) {
 
 	const rows = chunk(imagesArr, col);
 
+	const currentIndex = (row, img) => {
+		if (row === 0) {
+			return img;
+		} else {
+			return row * 3 + img;
+		}
+	};
+
 	return (
-		<Layout title={"Home"}>
+		<Layout title={"Home"} id="layout">
 			<h1>Home</h1>
+			{currImg !== null && (
+				<Modal
+					id="modal"
+					imagesArr={imagesArr}
+					currImg={currImg}
+					setCurrImg={setCurrImg}
+					isLoaded={isLoaded}
+					setIsLoaded={setIsLoaded}
+				/>
+			)}
 			<Grid>
 				{width !== null &&
 					rows.map((row, index) => {
@@ -64,9 +85,10 @@ export default function Home({ imagesArr }) {
 							<Row key={index}>
 								{row.map((img, imgIndex) => (
 									<StyledImage
-										onClick={() =>
-											console.log(rows[rowIndex][imgIndex], rowIndex)
-										}
+										onClick={() => {
+											setCurrImg(currentIndex(rowIndex, imgIndex));
+											setIsLoaded(false);
+										}}
 										src={img.path}
 										key={img.path}
 										width={img.w * rowRatio}
