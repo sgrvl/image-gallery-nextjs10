@@ -8,7 +8,11 @@ const Layout = ({ children, title }) => {
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
-			<main style={{ maxWidth: "1440px", margin: "0 auto" }}>{children}</main>
+			<main
+				style={{ maxWidth: "1440px", margin: "0 auto", padding: "0.25rem" }}
+			>
+				{children}
+			</main>
 		</div>
 	);
 };

@@ -16,6 +16,8 @@ const Row = styled.div`
 
 const StyledImage = styled(Image)`
 	object-fit: cover;
+	padding: 0.25rem;
+	cursor: pointer;
 `;
 
 export default function Home({ imagesArr }) {
@@ -55,12 +57,16 @@ export default function Home({ imagesArr }) {
 			<Grid>
 				{width !== null &&
 					rows.map((row, index) => {
+						const rowIndex = index;
 						const rowRatio = width / sum(row.map((img) => img.w));
 						const height = max(row.map((img) => img.h));
 						return (
 							<Row key={index}>
-								{row.map((img) => (
+								{row.map((img, imgIndex) => (
 									<StyledImage
+										onClick={() =>
+											console.log(rows[rowIndex][imgIndex], rowIndex)
+										}
 										src={img.path}
 										key={img.path}
 										width={img.w * rowRatio}
