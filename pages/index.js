@@ -58,14 +58,14 @@ export default function Home({ imagesArr }) {
 		if (row === 0) {
 			return img;
 		} else {
-			return row * 3 + img;
+			return row * col + img;
 		}
 	};
 
 	return (
 		<Layout title={"Home"} id="layout">
 			<h1>Home</h1>
-			{currImg !== null && (
+			{currImg !== null && col > 1 && (
 				<Modal
 					id="modal"
 					imagesArr={imagesArr}

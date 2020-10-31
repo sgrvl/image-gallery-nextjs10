@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useEffect } from "react";
-import { useScrollLock } from "./hooks";
+import { useEffect, useState } from "react";
+//import { useScrollLock } from "./hooks";
 
 const Wrap = styled.div`
 	max-width: 95%;
@@ -18,6 +18,7 @@ const StyledImage = styled(Image)`
 	transition: opacity 0.15s ease-in;
 	object-fit: contain;
 	max-height: 95vh;
+	transform: ${(props) => `translateX(-${props.margin / 2}px)`};
 `;
 
 const ClickCatcher = styled.div`
@@ -39,8 +40,18 @@ export default function Modal({
 	setCurrImg,
 	imagesArr,
 }) {
+	const [scrollbar, setScrollbar] = useState(
+		window.innerWidth - document.body.offsetWidth
+	);
 	const image = imagesArr[currImg];
-	useScrollLock();
+	useEffect(() => {
+		document.body.style.overflow = "hidden";
+		document.body.style.paddingRight = `${scrollbar}px`;
+		return () => {
+			document.body.style.overflow = "auto";
+			document.body.style.paddingRight = "0";
+		};
+	}, []);
 	return (
 		<>
 			<div style={{ position: "fixed", zIndex: "1000" }}>
@@ -64,6 +75,7 @@ export default function Modal({
 			<ClickCatcher onClick={() => setCurrImg(null)}>
 				<Wrap>
 					<StyledImage
+						margin={scrollbar}
 						onLoad={() => setIsLoaded(true)}
 						open={isLoaded}
 						src={image.path}
